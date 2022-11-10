@@ -1,6 +1,8 @@
 # gui-ping-monitor
 GUI tool for monitoring ping responses written in Python. Live updating gui chart showing ping response time. Uses matplotlib for visualization.
 
+![screenshot](/screenshots/screenshot1.jpg)
+
 ## Prerequisites
 gui-ping-monitor needs a few libraries
 ```
