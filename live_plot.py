@@ -9,6 +9,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--host', type=str, required=True)
 parser.add_argument('--warn', type=int, default=50)
 parser.add_argument('--crit', type=int, default=100)
+parser.add_argument('--debug', action='store_true')
 args = parser.parse_args()
 
 # initial data
@@ -35,7 +36,8 @@ def animate(i):
         data.append(crit_value * 2)
     else:
         data.append(host.avg_rtt)
-    print(host.avg_rtt, host.packet_loss)
+    if args.debug:
+        print(host.avg_rtt, host.packet_loss)
     ax.clear()
     for point in range(0, total_interval):
         if data[point] >= crit_value:
