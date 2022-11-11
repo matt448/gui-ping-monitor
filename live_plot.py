@@ -7,12 +7,14 @@ import argparse
 # Setup argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--host', type=str, required=True)
+parser.add_argument('--warn', type=int, default=50)
+parser.add_argument('--crit', type=int, default=100)
 args = parser.parse_args()
 
 # initial data
 hostname = args.host
-alert_value = 100
-warn_value = 50
+crit_value = args.crit
+warn_value = args.warn
 total_interval = 120
 data = [0] * total_interval
 
@@ -30,21 +32,21 @@ def animate(i):
     host = ping(hostname, count=1, interval=0.2)
     data.pop(0)
     if host.avg_rtt == 0 and host.packet_loss > 0:
-        data.append(alert_value * 2)
+        data.append(crit_value * 2)
     else:
         data.append(host.avg_rtt)
     print(host.avg_rtt, host.packet_loss)
     ax.clear()
     for point in range(0, total_interval):
-        if data[point] >= alert_value:
+        if data[point] >= crit_value:
             bar_color = 'red'
-        elif data[point] >= warn_value and data[point] < alert_value:
+        elif data[point] >= warn_value and data[point] < crit_value:
             bar_color = 'y'
         else:
             bar_color = 'green'
         ax.bar(point, data[point], color=bar_color)
     ax.axhline(y=warn_value, color='y', linestyle='dotted')
-    ax.axhline(y=alert_value, color='red', linestyle='dotted')
+    ax.axhline(y=crit_value, color='red', linestyle='dotted')
     ax.set_ylabel('Avg Resp Time in ms')
     ax.set_title(hostname +' Ping response time for past ' + str(total_interval) + ' seconds')
     ax.spines["top"].set_visible(False)
