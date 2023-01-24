@@ -6,16 +6,18 @@ import argparse
 
 # Setup argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('--host', type=str, required=True)
-parser.add_argument('--warn', type=int, default=50)
-parser.add_argument('--crit', type=int, default=100)
-parser.add_argument('--debug', action='store_true')
+parser.add_argument('--host', type=str, required=True, help='Host name or IP address to ping')
+parser.add_argument('--warn', type=int, default=50, help='Int in milliseconds. Warning level for chart. Yellow color bars')
+parser.add_argument('--crit', type=int, default=100, help='Int in milliseconds. Critical level for chart. Red color bars')
+parser.add_argument('--ping_count', type=int, default=2, help='Number of pings to send')
+parser.add_argument('--debug', action='store_true', help='Print debug out')
 args = parser.parse_args()
 
 # initial data
 hostname = args.host
 crit_value = args.crit
 warn_value = args.warn
+ping_count = args.ping_count
 total_interval = 120
 data = [0] * total_interval
 
@@ -30,14 +32,15 @@ ax = fig.add_axes((0.06, 0.06, 0.9, 0.94))
 
 # animation function
 def animate(i):
-    host = ping(hostname, count=1, interval=0.2)
+    host = ping(hostname, count=ping_count, interval=0.1)
+    print(host)
     data.pop(0)
-    if host.avg_rtt == 0 and host.packet_loss > 0:
+    if host.min_rtt == 0 and host.packet_loss > 0:
         data.append(crit_value * 2)
     else:
-        data.append(host.avg_rtt)
+        data.append(host.min_rtt)
     if args.debug:
-        print(host.avg_rtt, host.packet_loss)
+        print(host.min_rtt, host.packet_loss)
     ax.clear()
     for point in range(0, total_interval):
         if data[point] >= crit_value:

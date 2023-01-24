@@ -14,3 +14,17 @@ pip3 install icmplib
 ```
 sudo python3 live_plot.py --host=1.1.1.1
 ```
+
+## Command Line Options
+```
+usage: live_plot.py [-h] --host HOST [--warn WARN] [--crit CRIT] [--ping_count PING_COUNT] [--debug]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --host HOST           Host name or IP address to ping
+  --warn WARN           Int in milliseconds. Warning level for chart. Yellow color bars
+  --crit CRIT           Int in milliseconds. Critical level for chart. Red color bars
+  --ping_count PING_COUNT
+                        Number of pings to send
+  --debug               Print debug out
+```
