@@ -33,14 +33,13 @@ ax = fig.add_axes((0.06, 0.06, 0.9, 0.94))
 # animation function
 def animate(i):
     host = ping(hostname, count=ping_count, interval=0.1)
-    print(host)
     data.pop(0)
     if host.min_rtt == 0 and host.packet_loss > 0:
         data.append(crit_value * 2)
     else:
         data.append(host.min_rtt)
     if args.debug:
-        print(host.min_rtt, host.packet_loss)
+        print(host)
     ax.clear()
     for point in range(0, total_interval):
         if data[point] >= crit_value:
